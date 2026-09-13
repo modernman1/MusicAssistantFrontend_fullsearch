@@ -33,7 +33,6 @@
           <setup-flow-dialog />
           <player-rename-dialog />
           <item-context-menu />
-          <command-center />
           <AddManualLink
             v-model="showEditItemDialog"
             :type="editItemType"
@@ -48,7 +47,6 @@
 
 <script lang="ts" setup>
 import AddManualLink from "@/components/AddManualLink.vue";
-import CommandCenter from "@/components/CommandCenter.vue";
 import DialogDeleteConfirmation from "@/components/DialogDeleteConfirmation.vue";
 import DeleteGenreDialog from "@/components/genre/DeleteGenreDialog.vue";
 import LinkGenreDialog from "@/components/genre/LinkGenreDialog.vue";

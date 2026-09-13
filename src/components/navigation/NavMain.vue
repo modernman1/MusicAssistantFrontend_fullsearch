@@ -6,7 +6,6 @@ import { RouterLink, useRoute, useRouter } from "vue-router";
 const RouterLinkComponent = markRaw(RouterLink);
 
 import { Button } from "@/components/ui/button";
-import { Kbd } from "@/components/ui/kbd";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -33,8 +32,6 @@ interface NavItem {
   disabled?: boolean;
   hidden?: boolean;
   openInNewTab?: boolean;
-  action?: () => void;
-  shortcut?: string;
 }
 
 const props = defineProps<{
@@ -53,15 +50,9 @@ const router = useRouter();
 const { isMobile, setOpenMobile } = useSidebar();
 
 const isActive = (url: string) =>
-  !!url && (route.path === url || route.path.startsWith(url + "/"));
-
-const itemActive = (item: NavItem) => !item.action && isActive(item.url);
+  route.path === url || route.path.startsWith(url + "/");
 
 const handleClick = (item: NavItem, event: Event) => {
-  if (item.action) {
-    event.preventDefault();
-    item.action();
-  }
   if (item.openInNewTab) {
     event.preventDefault();
     const resolved = router.resolve(item.url).href;
@@ -199,20 +190,16 @@ const draggedItem = computed(() =>
         >
           <SidebarMenuButton
             :as="
-              item.disabled || item.openInNewTab || item.action
+              item.disabled || item.openInNewTab
                 ? 'button'
                 : RouterLinkComponent
             "
-            v-bind="
-              item.disabled || item.openInNewTab || item.action
-                ? {}
-                : { to: item.url }
-            "
-            :is-active="itemActive(item)"
+            v-bind="item.disabled || item.openInNewTab ? {} : { to: item.url }"
+            :is-active="isActive(item.url)"
             :tooltip="item.title"
             :disabled="item.disabled"
             :class="[
-              itemActive(item)
+              isActive(item.url)
                 ? 'no-underline font-bold text-sm'
                 : 'no-underline font-medium text-sm',
               item.disabled ? 'opacity-50 cursor-not-allowed' : '',
@@ -223,15 +210,9 @@ const draggedItem = computed(() =>
               :is="item.icon"
               v-if="item.icon"
               class="mr-1"
-              :stroke-width="itemActive(item) ? 2.5 : 2"
+              :stroke-width="isActive(item.url) ? 2.5 : 2"
             />
-            <span class="min-w-0 truncate">{{ item.title }}</span>
-            <Kbd
-              v-if="item.shortcut"
-              class="ml-auto shrink-0 opacity-60 group-data-[collapsible=icon]:hidden"
-            >
-              {{ item.shortcut }}
-            </Kbd>
+            <span>{{ item.title }}</span>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>

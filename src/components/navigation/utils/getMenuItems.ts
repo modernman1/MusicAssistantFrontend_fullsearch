@@ -25,8 +25,6 @@ import { Component } from "vue";
 
 export type MenuGroup = "explore" | "library" | "plugins" | "system";
 
-export type MenuItemAction = "command-center";
-
 // Sections that can be customized (renamed / label hidden) in menu edit mode.
 export type MenuSectionId = MenuGroup | "shortcuts";
 
@@ -40,7 +38,6 @@ export interface MenuItem {
   // User opted out of this item via menu edit mode.
   hidden: boolean;
   disabled?: boolean;
-  action?: MenuItemAction;
 }
 
 export interface MenuSectionConfig {
@@ -75,7 +72,6 @@ interface MenuItemDefinition {
   path: string;
   isLibraryNode: boolean;
   group: MenuGroup;
-  action?: MenuItemAction;
   // Runtime availability (e.g. plugin enabled); unavailable items are never
   // rendered, not even in edit mode.
   available?: () => boolean;
@@ -96,10 +92,9 @@ const MENU_ITEM_REGISTRY: MenuItemDefinition[] = [
     id: "search",
     label: "search",
     icon: Search,
-    path: "",
+    path: "/search",
     isLibraryNode: false,
     group: "explore",
-    action: "command-center",
   },
   {
     id: "browse",
@@ -249,7 +244,6 @@ export const getMenuItems = function (): MenuItem[] {
       group: def.group,
       hidden: hidden.has(id),
       disabled: def.disabled?.() || undefined,
-      action: def.action,
     });
   }
   return items;

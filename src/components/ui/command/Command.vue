@@ -12,7 +12,6 @@ const props = withDefaults(
   {
     modelValue: "",
     class: undefined,
-    highlightOnHover: true,
   },
 );
 

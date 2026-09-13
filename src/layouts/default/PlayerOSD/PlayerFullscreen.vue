@@ -496,7 +496,6 @@ import { Button } from "@/components/ui/button";
 import { useLyricsElapsedTime } from "@/composables/lyrics/useLyricsElapsedTime";
 import { useLyricsOffset } from "@/composables/lyrics/useLyricsOffset";
 import { useActiveTrackWaveform } from "@/composables/useActiveTrackWaveform";
-import { useCommandCenter } from "@/composables/useCommandCenter";
 import { setStatusBarColorOverride } from "@/composables/useStatusBarColor";
 import { useUserPreferences } from "@/composables/userPreferences";
 import { useVisualizer } from "@/composables/visualizer/useVisualizer";
@@ -561,7 +560,6 @@ import QueueBtn from "./PlayerControlBtn/QueueBtn.vue";
 import PlayerTimeline from "./PlayerTimeline.vue";
 
 const { name, mdAndUp } = useDisplay();
-const { open: openCommandCenter } = useCommandCenter();
 
 const MIN_HEIGHT_SHOW_FULL_DETAILS = 750;
 // The player select button is important enough to keep pinned at the bottom in
@@ -986,9 +984,10 @@ const navigateOrSearch = function (searchTerm: string, uri?: string) {
       },
     });
   } else {
-    // No valid URI - hand the term to the command center
+    // No valid URI - open global search
+    store.globalSearchTerm = searchTerm;
+    router.push({ name: "search" });
     store.showFullscreenPlayer = false;
-    openCommandCenter({ query: searchTerm });
   }
 };
 
@@ -1061,12 +1060,13 @@ const onAlbumClick = async function () {
       console.error("Error searching library for album:", error);
     }
 
-    // Not found in library - fall back to the command center
+    // Not found in library - fall back to global search
     const searchTerm = currentMedia.artist
       ? `${currentMedia.artist} - ${currentMedia.album}`
       : currentMedia.album || "";
+    store.globalSearchTerm = searchTerm;
+    router.push({ name: "search" });
     store.showFullscreenPlayer = false;
-    openCommandCenter({ query: searchTerm });
   }
 };
 
@@ -1133,9 +1133,10 @@ const onArtistClick = async function () {
       console.error("Error searching library for artist:", error);
     }
 
-    // Not found in library - fall back to the command center
+    // Not found in library - fall back to global search
+    store.globalSearchTerm = currentMedia.artist;
+    router.push({ name: "search" });
     store.showFullscreenPlayer = false;
-    openCommandCenter({ query: currentMedia.artist });
   }
 };
 

@@ -1,0 +1,2 @@
+FROM ghcr.io/music-assistant/server:2.10.3
+COPY music_assistant_frontend/. /app/venv/lib/python3.14/site-packages/music_assistant_frontend/
