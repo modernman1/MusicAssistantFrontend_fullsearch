@@ -1,5 +1,5 @@
 # Music Assistant frontend (Vue PWA)
-
+FORKED 13-SEP-2026 reverting August change to mmodal search box back to full search with hamburger menu for actions restored, otherwise based on Main branch from 13Sep26 
 The Music Assistant frontend/panel is developed in Vue, development instructions below.
 
 ## Recommended IDE Setup
